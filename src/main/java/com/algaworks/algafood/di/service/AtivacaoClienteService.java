@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 import com.algaworks.algafood.di.notificacao.Notificador;
-@Component //essa classe é um bean
+
 public class AtivacaoClienteService {
 	
 	//dependencia com notificador email é sempre null pois ninguem instancia - null pointer exception
