@@ -7,14 +7,13 @@ import com.algaworks.algafood.di.notificacao.Notificador;
 
 public class AtivacaoClienteService {
 	
-
 	private Notificador notificador;
 	
+	//1 ponto de injeção - construtor 
 	public AtivacaoClienteService(Notificador notificador) {
 		this.notificador = notificador;
-		
-		System.out.println("AtivacaoClienteService"+notificador);
 	}
+	
 	
 	public void ativar(Cliente cliente) {
 		cliente.ativar();
