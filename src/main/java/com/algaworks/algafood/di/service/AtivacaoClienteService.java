@@ -7,8 +7,8 @@ import com.algaworks.algafood.di.modelo.Cliente;
 import com.algaworks.algafood.di.notificacao.Notificador;
 @Component
 public class AtivacaoClienteService {
-	//dependencia obrigatoria - sem isso n funciona.
-	@Autowired
+	//dependencia Opcional - required = false 
+	@Autowired(required = false)
 	private Notificador notificador;
 	
 	
