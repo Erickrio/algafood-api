@@ -7,9 +7,7 @@ import com.algaworks.algafood.di.notificacao.Notificador;
 
 public class AtivacaoClienteService {
 	
-	//dependencia com notificador email é sempre null pois ninguem instancia - null pointer exception
-	
-	//acoplado c interface
+
 	private Notificador notificador;
 	
 	public AtivacaoClienteService(Notificador notificador) {
