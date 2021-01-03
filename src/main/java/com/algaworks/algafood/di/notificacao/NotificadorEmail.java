@@ -1,20 +1,19 @@
 package com.algaworks.algafood.di.notificacao;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
+
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 //@Qualifier("email") //anotação + identificador(email)
-@Qualifier("normal")
+@TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
 @Component
 public class NotificadorEmail implements Notificador {
 
 
 	@Override
 	public void notificar(Cliente cliente, String mensagem) {	
-		System.out.printf("Notificando %s por SMS através do telefone %s: %s\n", 
-				cliente.getNome(), cliente.getTelefone(), mensagem);
+		System.out.printf("Notificando %s através do e-mail %s: %s\n", 
+				cliente.getNome(), cliente.getEmail(), mensagem);
 	}
 
 
