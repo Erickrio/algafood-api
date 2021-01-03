@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
-@Qualifier("sms")
+@Qualifier("urgente")
 @Component
 public class NotificadorSMS implements Notificador {
 

@@ -10,7 +10,8 @@ import com.algaworks.algafood.di.notificacao.Notificador;
 public class AtivacaoClienteService {
 //problema de ambuiguidade é que o spring n sabe qual que executa (email ou sms)??
 //	@Qualifier("email") //diz ao spring usar o bean que tem qualificador email
-	@Qualifier("sms")
+//	@Qualifier("sms")
+	@Qualifier("urgente")
 	@Autowired
 	private Notificador notificador;
 	
