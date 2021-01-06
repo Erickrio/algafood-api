@@ -12,15 +12,14 @@ import com.algaworks.algafood.di.notificacao.TipoDoNotificador;
 
 @Component
 public class AtivacaoClienteService {
-    //publica eventos
-	@Autowired//é injetado
-   	private ApplicationEventPublisher eventPublisher;
-   	
-   	
+
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
+	
 	public void ativar(Cliente cliente) {
 		cliente.ativar();
-		//dispara um evento para todo sistema que diz que o cliente foi ATIVADO
+
 		eventPublisher.publishEvent(new ClienteAtivadoEvent(cliente));
-}
+	}
 
 }
