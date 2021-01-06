@@ -2,6 +2,7 @@ package com.algaworks.algafood.di.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
@@ -11,16 +12,15 @@ import com.algaworks.algafood.di.notificacao.TipoDoNotificador;
 
 @Component
 public class AtivacaoClienteService {
-
-	@TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
-	@Autowired
-	private Notificador notificador;
-		
+    //publica eventos
+	@Autowired//é injetado
+   	private ApplicationEventPublisher eventPublisher;
+   	
+   	
 	public void ativar(Cliente cliente) {
 		cliente.ativar();
-		
-		notificador.notificar(cliente, "Seu cadastro no sistema está ativo");
-	
+		//dispara um evento para todo sistema que diz que o cliente foi ATIVADO
+		eventPublisher.publishEvent(new ClienteAtivadoEvent(cliente));
 }
 
 }
