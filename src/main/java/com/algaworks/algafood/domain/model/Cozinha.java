@@ -2,16 +2,18 @@ package com.algaworks.algafood.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity; //javax vem do JPA
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name= "tab_cozinhas")
 public class Cozinha {
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="nom_cozinha",length=30)
+	
 	private String nome; 
 
 	public Long getId() {
