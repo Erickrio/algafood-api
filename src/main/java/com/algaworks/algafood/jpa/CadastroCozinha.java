@@ -21,6 +21,11 @@ public class CadastroCozinha {
 				.getResultList();
 	}
 	
+	//retorna uma unica cozinha - busca pelo ID.
+	public Cozinha buscar(Long id) {
+		return manager.find(Cozinha.class, id);
+	}
+	
 	@Transactional//executado dentro de uma transação
 	public Cozinha adicionar(Cozinha cozinha) {
 		return manager.merge(cozinha);
