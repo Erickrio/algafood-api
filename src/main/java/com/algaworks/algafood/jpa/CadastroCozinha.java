@@ -27,7 +27,7 @@ public class CadastroCozinha {
 	}
 	
 	@Transactional//executado dentro de uma transação
-	public Cozinha adicionar(Cozinha cozinha) {
+	public Cozinha salvar(Cozinha cozinha) {
 		return manager.merge(cozinha);
 	}
 	
