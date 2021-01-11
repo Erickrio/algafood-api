@@ -31,4 +31,12 @@ public class CadastroCozinha {
 		return manager.merge(cozinha);
 	}
 	
+	@Transactional
+	public void remover (Cozinha cozinha) {
+		//busca o contexto da persistencia(intancia gerenciada)
+		cozinha = buscar(cozinha.getId());
+		//chaa o remove
+		manager.remove(cozinha);
+	}
+	
 }
