@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +24,11 @@ public class Restaurante {
 	
 	@Column(name= "taxa_Frete") 
 	private BigDecimal taxaFrete;
+	
+	//restaurante possui uma cozinha
+	
+	@ManyToOne //muitos restaurantes possui uma cozinha
+	private Cozinha cozinha;
 
 	
 	
