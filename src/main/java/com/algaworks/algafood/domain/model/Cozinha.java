@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity; //javax vem do JPA
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,15 +12,15 @@ import lombok.EqualsAndHashCode;
 
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded=true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Cozinha {
+
 	@EqualsAndHashCode.Include
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String nome; 
-		
-
+	@Column(nullable = false)
+	private String nome;
 }

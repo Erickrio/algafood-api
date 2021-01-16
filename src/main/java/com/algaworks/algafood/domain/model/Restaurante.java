@@ -21,9 +21,10 @@ public class Restaurante {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(nullable = false)
 	private String nome;
 	
-	@Column(name= "taxa_Frete") 
+	@Column(name= "taxa_Frete" , nullable = false) 
 	private BigDecimal taxaFrete;
 	
 	//restaurante possui uma cozinha
