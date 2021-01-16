@@ -12,13 +12,13 @@ import javax.persistence.ManyToOne;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded=true)
+@Data ////tem getter,setter,equals e hashcode (lambok)
+@EqualsAndHashCode(onlyExplicitlyIncluded=true)//somente deixar explicito em um atributo
 @Entity
 public class Restaurante {
-	@EqualsAndHashCode.Include //Apenas o id seja usado nos métodos equals e hashCode.
+	@EqualsAndHashCode.Include //Apenas o id seja usado nos métodos equals e hashCode. (//inclui explicitamente aqui)
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY) //autoIncremento
 	private Long id;
 	
 	@Column(nullable = false)
@@ -30,7 +30,7 @@ public class Restaurante {
 	//restaurante possui uma cozinha
 	
 	@ManyToOne //muitos restaurantes possui uma cozinha
-	@JoinColumn (name="cozinha_id")
+	@JoinColumn (name="cozinha_id",nullable = false)// restrições para não permitir valores nulos nos atributos de restaurante
 	private Cozinha cozinha;
 
 	

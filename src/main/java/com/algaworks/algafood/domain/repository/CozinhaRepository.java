@@ -6,7 +6,7 @@ import com.algaworks.algafood.domain.model.Cozinha;
 
 public interface CozinhaRepository {
 	//negócios(dominio) - O que uma cozinha tem que ter? 
-	//PADRAP - repository é criado por agregado(agregate roo) e não por entidade
+	//PADRAO - repository é criado por agregado(agregate roo) e não por entidade
 	
 	List<Cozinha> listar(); //permitir  listar cozinha
 	Cozinha buscar(Long id);
