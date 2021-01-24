@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,7 +90,29 @@ public class CozinhaController {
 		
 	}
 	
+	@DeleteMapping("/{cozinhaId}")
+	public ResponseEntity<Cozinha>remover(@PathVariable Long cozinhaId){
+		//Tratando erro de -  Cannot delete or update a parent row: a foreign key constraint fails (`algafood`.`restaurante`, CONSTRAINT )
+		
+		try {
+		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+		
+		if (cozinha != null) {
+		cozinhaRepository.remover(cozinha);
+		
+		//HttpStatus.NO_CONTENT - retorna s corpo - SUCESSO
+		return ResponseEntity.noContent().build();
+	}
 	
+		//caso contrario retorne recurso não existe (notFound)
+		return ResponseEntity.notFound().build();
+	}catch(DataIntegrityViolationException e) {
+		//Satus 400 - Bad Request é correto também.
+		//HttpStatus.CONFLICT(erro do cliente) - Ideal é retornar um corpo dizendo qual foi o problema que gerou esse conflito
+		return ResponseEntity.status(HttpStatus.CONFLICT).build();
+	}
+	
+}
 	
 }
 
