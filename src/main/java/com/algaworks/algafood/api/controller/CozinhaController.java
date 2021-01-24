@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.model.CozinhasXmlWrapper;
 import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.model.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.domain.model.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
@@ -95,28 +97,21 @@ public class CozinhaController {
 	
 	@DeleteMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha>remover(@PathVariable Long cozinhaId){
-		//Tratando erro de -  Cannot delete or update a parent row: a foreign key constraint fails (`algafood`.`restaurante`, CONSTRAINT )
 		
-		try {
-		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-		
-		if (cozinha != null) {
-		cozinhaRepository.remover(cozinha);
-		
-		//HttpStatus.NO_CONTENT - retorna s corpo - SUCESSO
+   try {
+	   //Pede a classe de serviço (cadastrocozinha) para excluir a cozinha 
+	   cadastroCozinha.excluir(cozinhaId);
+	   //sucesso = retorna noContent
 		return ResponseEntity.noContent().build();
-	}
-	
-		//caso contrario retorne recurso não existe (notFound)
-		return ResponseEntity.notFound().build();
-	}catch(DataIntegrityViolationException e) {
-		//Satus 400 - Bad Request é correto também.
-		//HttpStatus.CONFLICT(erro do cliente) - Ideal é retornar um corpo dizendo qual foi o problema que gerou esse conflito
+		
+   } catch(EntidadeNaoEncontradaException e) {
+	   return ResponseEntity.notFound().build();
+	   //Dando tudo errado - entra nas condições do catch
+	}catch(EntidadeEmUsoException e) {
 		return ResponseEntity.status(HttpStatus.CONFLICT).build();
 	}
 	
-}
-	
-}
+   }
 
+}
 
