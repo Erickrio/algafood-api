@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -35,7 +37,7 @@ public class CozinhaController {
 	public CozinhasXmlWrapper listarXml() {
 		return new CozinhasXmlWrapper(cozinhaRepository.listar());
 	}
-	//responseEntity - manipula a respota
+	//responseEntity - manipula a resposta
 	@GetMapping("/{cozinhaId}")
 	public ResponseEntity <Cozinha>buscar(@PathVariable Long cozinhaId) {
 		Cozinha cozinha =  cozinhaRepository.buscar(cozinhaId);
@@ -59,5 +61,35 @@ public class CozinhaController {
 		return cozinhaRepository.salvar(cozinha);
 		
 	}
-
+	
+	@PutMapping("/{cozinhaId}")
+	public ResponseEntity<Cozinha>atualizar(@PathVariable Long cozinhaId,
+			@RequestBody Cozinha cozinha){
+		
+		//busca cozinha existente
+		Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+		
+		/* Precisamos copiar os valores da instancia da cozinha para dentro da atual
+		// 1 forma de se fazer : se tivessemos 10 atributos ,precisariamos fazer para todos eles. 
+		 * cozinhaAtual.setNome(cozinha.getNome());
+		 * cozinhaAtual.setDescricao(cozinha.getDescricao());
+		 * /Forma de facilitar - use o BeanUtils. (origem(cozinha) e target(destino para cozinhaAtual) - FACILITA quando temos muitos propriedades 
+		 */
+		
+		//Correção do erro Target must not be null - 
+		if(cozinhaAtual != null) {
+			
+		BeanUtils.copyProperties(cozinha, cozinhaAtual,"id");
+		cozinhaRepository.salvar(cozinhaAtual);	
+		return ResponseEntity.ok(cozinhaAtual);
+        }
+		//caso contrário retorne notFound (não encontrado)
+		return ResponseEntity.notFound().build();
+		
+	}
+	
+	
+	
 }
+
+
