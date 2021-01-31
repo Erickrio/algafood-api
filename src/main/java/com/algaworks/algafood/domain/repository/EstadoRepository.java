@@ -9,5 +9,6 @@ public interface EstadoRepository {
 	List<Estado> listar();
 	Estado buscar(Long id);
 	Estado salvar(Estado estado);
-	void remover(Long id);
+	void remover(Long id);//Ao invés de recebermos como parâmetro, um objeto do tipo da entidade, iremos receber o ID das mesmas.
+
 }
