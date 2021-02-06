@@ -1,12 +1,15 @@
 package com.algaworks.algafood.api.controller;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +24,7 @@ import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.model.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping(value ="/restaurantes")
@@ -51,9 +55,10 @@ public class RestauranteController {
 	   return ResponseEntity.notFound().build();	
 	}
 	
-	@PostMapping
+	
 	//@ResponseStatus(HttpStatus.CREATED)
 	//coringa ? -pode ser qualquer coisa(restaurante) = getMessage
+	@PostMapping
 	public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante){
 		try {
 			restaurante = cadastroRestaurante.salvar(restaurante);
@@ -72,55 +77,60 @@ public class RestauranteController {
 	 * @PutMapping mapear nosso endpoint para esse verbo, com esse path
 	 */
 	@PutMapping("/{restauranteId}")
-	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
+	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
+			@RequestBody Restaurante restaurante) {
 		try {
 			Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
-
+			
 			if (restauranteAtual != null) {
 				BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
-
+				
 				restauranteAtual = cadastroRestaurante.salvar(restauranteAtual);
 				return ResponseEntity.ok(restauranteAtual);
 			}
-
+			
 			return ResponseEntity.notFound().build();
-
+		
 		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.badRequest()
+					.body(e.getMessage());
 		}
 	}
 	
-	@PatchMapping("/{restauranteId}")
+	@PatchMapping("/{restauranteId}")//atualiza apenas 1 atributo 
 	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId,
-			@RequestBody Map<String, Object> campos){
-		
+			@RequestBody Map<String, Object> campos) {
 		//busca no restaurante
 		Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
-		
-		
 		//se restaurante atual for nula
-		
-		if (restauranteAtual != null) {
-			return ResponseEntity.notFound().build(); 
+		if (restauranteAtual == null) {
+			return ResponseEntity.notFound().build();
 		}
-		
 		//Função do merge mesclar os valores que está no campo (campos) - dentro do restauranteAtual
 		merge(campos, restauranteAtual);
-		
-
 		//chama o metodo atualizar passando o restauranteId e o restaurante atual para salvar
-		return atualizar(restauranteId,restauranteAtual );
+		return atualizar(restauranteId, restauranteAtual);
 	}
 
-	private void merge(Map<String, Object> camposOrigem, Restaurante restauranteDestino) {
+	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
+		//converte objetos java em JSON - vise versa
+		ObjectMapper objectMapper = new ObjectMapper();
+		Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
+		System.out.println(restauranteOrigem);
+		
 		//imrpime oq ta dentro do mapa - função lambda (loop)
-		camposOrigem.forEach((nomePropriedade,valorPropriedade) -> {
-		//	if(nomePropriedade.equals("nome")) {
-		//		restauranteDestino.setNome((String)valorPropriedade);
-		//	} TODO - IREMOS USAR OUTRA FORMA AO INVÉS DESSA
+		dadosOrigem.forEach((nomePropriedade,valorPropriedade) -> {
+			Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+			field.setAccessible(true);
+			//busca o valor da propriedade (field) dentro da instancia resturantrOrigem 
+			Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+			//novo valor convertido pelo objectMapper
+			//System.out.println(nomePropriedade + "=" + valorPropriedade + "="+novoValor);
 			
-			System.out.println(nomePropriedade + "=" + valorPropriedade);
+			//pegar os valores do restauranteOrigem e atribuir ao restauranteDestino
+			  ReflectionUtils.setField(field, restauranteDestino, novoValor);
 		});
+		
 	}
 
 }
