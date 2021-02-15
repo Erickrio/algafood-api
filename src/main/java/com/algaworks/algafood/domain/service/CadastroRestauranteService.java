@@ -29,6 +29,5 @@ public class CadastroRestauranteService {
 		
 		return restauranteRepository.salvar(restaurante);
 	}
-	
 
 }
