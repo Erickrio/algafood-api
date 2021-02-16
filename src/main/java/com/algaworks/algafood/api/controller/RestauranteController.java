@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +41,16 @@ public class RestauranteController {
 	//listando todos os restaurantes
 	@GetMapping
 	public List<Restaurante>listar(){
-		return restauranteRepository.listar();	
+		return restauranteRepository.findAll();	
 	}
 	
 	//lista por ID
 	@GetMapping("/{restauranteId}")
 	public ResponseEntity<Restaurante>buscar(@PathVariable Long restauranteId){
-		Restaurante restaurante = restauranteRepository.buscar(restauranteId);
+	Optional<Restaurante> restaurante = restauranteRepository.findById(restauranteId);
 		
-		if (restaurante != null) {
-			return ResponseEntity.ok(restaurante);
+		if (restaurante.isPresent()) {
+			return ResponseEntity.ok(restaurante.get());
 		}
 		
 	   return ResponseEntity.notFound().build();	
@@ -80,7 +81,7 @@ public class RestauranteController {
 	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
 			@RequestBody Restaurante restaurante) {
 		try {
-			Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
+			Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
 			
 			if (restauranteAtual != null) {
 				BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
@@ -101,7 +102,7 @@ public class RestauranteController {
 	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId,
 			@RequestBody Map<String, Object> campos) {
 		//busca no restaurante
-		Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
+		Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
 		//se restaurante atual for nula
 		if (restauranteAtual == null) {
 			return ResponseEntity.notFound().build();
