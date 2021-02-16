@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ public class EstadoController {
 
 	@GetMapping
 	public List<Estado> listar() {
-		return estadoRepository.listar();
+		//busca Estado
+		return estadoRepository.findAll();
 	}
 	
     //dicionar os métodos ao nosso controller de Estado para podermos incluir, buscar, alterar, remover recursos.
@@ -43,11 +45,11 @@ public class EstadoController {
 	////responseEntity - manipula a resposta
 	@GetMapping("/{estadoId}")
 	public ResponseEntity<Estado> buscar(@PathVariable Long estadoId) {
-		Estado estado = estadoRepository.buscar(estadoId);
+		Optional<Estado> estado = estadoRepository.findById(estadoId);
 		//se  o Estado existe no repositorio 
-		if (estado != null) {
+		if (estado.isPresent()) {
 			//retorna ok - corpo da reposta a representação do Estado
-			return ResponseEntity.ok(estado);
+			return ResponseEntity.ok(estado.get());
 		}
 
 		return ResponseEntity.notFound().build();
@@ -61,7 +63,7 @@ public class EstadoController {
 
 	@PutMapping("/{estadoId}")
 	public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
-		Estado estadoAtual = estadoRepository.buscar(estadoId);
+		Estado estadoAtual = estadoRepository.findById(estadoId).orElse(null);
 
 		if (estadoAtual != null) {
 			//Forma de facilitar - use o BeanUtils. (origem(estado) e target(destino para estadoAtual) - FACILITA quando temos muitas propriedades 	
