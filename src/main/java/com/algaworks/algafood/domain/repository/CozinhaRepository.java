@@ -17,11 +17,12 @@ public interface CozinhaRepository extends JpaRepository<Cozinha,Long> {
 	//List<Cozinha> nome(String nome);
 	
 	//prefixo findBy + criterios (Exemplo) - findByExemplo
-	List<Cozinha> findByNome(String nome);
+	//List<Cozinha> findByNome(String nome);
 	
 	//List<Cozinha> findQualquerCoisaByNome(String nome);
 	
-	List<Cozinha> findTodosByNome(String nome);
+	//like %nome% = containing
+	List<Cozinha> findTodosByNomeContaining(String nome);
 	
 	//retornar uma unica instância - retorna apenas uma. Mais de uma retorna exceção
 	//Cozinha findBynome(String nome);
