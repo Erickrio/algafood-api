@@ -22,7 +22,8 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long>,
 	
 	//like %nome% = containing filtra por nome e ID da cozinha
 	//List<Restaurante> findTodosByNomeContainingAndCozinhaId(String nome,Long cozinha);
-
+	
+	
 	Optional<Restaurante> findFirstRestauranteByNomeContaining(String nome);
 	
 	List<Restaurante> findTop2ByNomeContaining(String nome);
