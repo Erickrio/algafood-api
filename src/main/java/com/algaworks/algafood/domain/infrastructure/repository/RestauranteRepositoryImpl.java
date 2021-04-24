@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.infrastructure.repository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,51 +26,34 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 	
 	@Override
 	public List<Restaurante> find(String nome,BigDecimal taxaFreteInicial,BigDecimal taxaFreteFinal){
-		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		var builder = manager.getCriteriaBuilder();
 		
-//		var jpql = new StringBuilder();
-//		jpql.append("from Restaurante where 0 = 0 ");
-//		
-//		var parametros = new HashMap<String,Object>();
-//		
-//		//verifica se n tá nulo e n tá vazio (hasLength)
-//		if (StringUtils.hasLength(nome)) {
-//			jpql.append("and nome like :nome ");
-//			parametros.put("nome","%" + nome + "%");
-//		}
-//		
-//		if (taxaFreteInicial != null) {
-//			jpql.append("and taxaFrete >= :taxaInicial ");
-//			parametros.put("taxaInicial", taxaFreteInicial);
-//		}
-//		
-//		if (taxaFreteFinal != null) {
-//			jpql.append("and taxaFrete <= :taxaFinal ");
-//			parametros.put("taxaFinal", taxaFreteFinal);
-//		}
-//		
-//		TypedQuery<Restaurante> query = 
-//				manager.createQuery(jpql.toString(),Restaurante.class);
-//		
-//		       parametros.forEach((chave,valor) -> query.setParameter(chave, valor));
-//				return query.getResultList();
+		var criteria = builder.createQuery(Restaurante.class);
+		var root = criteria.from(Restaurante.class);
 		
-	
-		CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
-		Root<Restaurante> root = criteria.from(Restaurante.class);
+		//Lista de predicates
+		var predicates = new ArrayList<Predicate>();
 		
-		//criando instancia de predicate
+		//se tiver texto na var nome
+		if(StringUtils.hasText(nome)) {
+			predicates.add(builder.like(root.get("nome"), "%" + nome + "%" ));
+		}
 		
-		Predicate nomePredicate = builder.like(root.get("nome"), "%" + nome + "%" );
-		Predicate taxaInicialPredicate = builder
-				.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial);
-		Predicate taxaFinalPredicate = builder
-				.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal);
+		if (taxaFreteInicial != null) {
+			predicates.add( builder
+					.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
+		}
 		
-		//busca só por nome
-		criteria.where(nomePredicate,taxaInicialPredicate,taxaFinalPredicate); 
+		if (taxaFreteFinal != null) {
+			predicates.add( builder
+					.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
+		}
 		
-		TypedQuery<Restaurante> query = manager.createQuery(criteria);
+		//busca só por nome,taxainicial e final
+		//converter lista em array -use toArray(instancia vazia[0])
+		criteria.where(predicates.toArray(new Predicate[0])); 
+		
+		var query = manager.createQuery(criteria);
 		return query.getResultList();
 		
 					
