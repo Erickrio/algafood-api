@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.algaworks.algafood.domain.model.Cozinha;
 //negócios(dominio) - O que uma cozinha tem que ter? 
 @Repository//diz que e Repository do Spring data JPA
-public interface CozinhaRepository extends JpaRepository<Cozinha,Long> {
+public interface CozinhaRepository extends CustomJpaRepository<Cozinha, Long> {
 
 	//cria um implementação em tempo real
 	
