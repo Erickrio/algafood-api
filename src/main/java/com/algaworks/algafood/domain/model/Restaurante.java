@@ -14,6 +14,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 @Data ////tem getter,setter,equals e hashcode (lambok)
@@ -40,6 +42,8 @@ public class Restaurante {
 	//muitos restaurantes possui muitas formas de pagamento
 	//joincolumn- define o nome da coluna da tab intermediaria da tab restaurante
     //inverso - tab forma de Pagamento
+	//JsonIgnore --gera as representações s forma de pagamento
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),
