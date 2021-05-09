@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,6 +39,9 @@ public class Restaurante {
 	@ManyToOne //muitos restaurantes possui uma cozinha
 	@JoinColumn (name="cozinha_id",nullable = false)// restrições para não permitir valores nulos nos atributos de restaurante
 	private Cozinha cozinha;
+	
+	@Embedded //é uma parte da classe restaurante
+	private Endereco endereco;
 	
 	//muitos restaurantes possui muitas formas de pagamento
 	//joincolumn- define o nome da coluna da tab intermediaria da tab restaurante
