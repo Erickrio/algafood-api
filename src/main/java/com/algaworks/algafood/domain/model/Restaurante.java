@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -43,6 +47,20 @@ public class Restaurante {
 	@JsonIgnore //Não traz o endereco na requisicao Restaurante
 	@Embedded //é uma parte da classe restaurante
 	private Endereco endereco;
+	
+	
+	//dt cadastro e atualização
+	//nullable - indica que a propriedade é obrigatoria
+	//@CreationTimestamp - dt atual
+	@JsonIgnore
+	@CreationTimestamp
+	@Column(nullable=false)
+	private LocalDateTime dataCadastro;
+	
+	@JsonIgnore
+	@UpdateTimestamp
+	@Column(nullable=false)
+	private LocalDateTime dataAtualizacao;
 	
 	//muitos restaurantes possui muitas formas de pagamento
 	//joincolumn- define o nome da coluna da tab intermediaria da tab restaurante
