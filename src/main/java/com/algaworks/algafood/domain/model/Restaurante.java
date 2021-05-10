@@ -40,6 +40,7 @@ public class Restaurante {
 	@JoinColumn (name="cozinha_id",nullable = false)// restrições para não permitir valores nulos nos atributos de restaurante
 	private Cozinha cozinha;
 	
+	@JsonIgnore //Não traz o endereco na requisicao Restaurante
 	@Embedded //é uma parte da classe restaurante
 	private Endereco endereco;
 	
