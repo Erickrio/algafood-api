@@ -82,10 +82,11 @@ public class RestauranteController {
 			@RequestBody Restaurante restaurante) {
 		try {
 			Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
-			
+			//cópia das propriedades do objeto Restaurante
 			if (restauranteAtual != null) {
+			// add propriedade para ser ignorada
 				BeanUtils.copyProperties(restaurante, restauranteAtual, "id","formasPagamento",
-						"endereco","dataCadastro");
+						"endereco","dataCadastro","produto");
 				
 				restauranteAtual = cadastroRestaurante.salvar(restauranteAtual);
 				return ResponseEntity.ok(restauranteAtual);
