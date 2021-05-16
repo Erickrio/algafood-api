@@ -42,9 +42,9 @@ public class Restaurante {
 	private BigDecimal taxaFrete;
 	
 	//@JsonIgnoreProperties -> Cozinha$HibernateProxy [\"hibernateLazyInitializer\"])" ignora propriedades dentro da cozinha (classe maluca)
-	
-	//@JsonIgnore
 	//@JsonIgnoreProperties("hibernateLazyInitializer")
+	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY ) //muitos restaurantes possui uma cozinha
 	@JoinColumn (name="cozinha_id",nullable = false)// restrições para não permitir valores nulos nos atributos de restaurante
 	private Cozinha cozinha; //restaurante possui uma cozinha
@@ -71,7 +71,8 @@ public class Restaurante {
 	//joincolumn- define o nome da coluna da tab intermediaria da tab restaurante
     //inverso - tab forma de Pagamento
 	//JsonIgnore --gera as representações s forma de pagamento
-	@JsonIgnore
+	
+	//@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),
