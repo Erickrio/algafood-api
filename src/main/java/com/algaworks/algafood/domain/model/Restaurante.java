@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,10 +22,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-@Data ////tem getter,setter,equals e hashcode (lambok)
+@Data //- getter,setter,equals e hashcode (lambok)
 @EqualsAndHashCode(onlyExplicitlyIncluded=true)//somente deixar explicito em um atributo
 @Entity
 public class Restaurante {
@@ -39,11 +41,13 @@ public class Restaurante {
 	@Column(name= "taxa_Frete" , nullable = false) 
 	private BigDecimal taxaFrete;
 	
-	//restaurante possui uma cozinha
+	//@JsonIgnoreProperties -> Cozinha$HibernateProxy [\"hibernateLazyInitializer\"])" ignora propriedades dentro da cozinha (classe maluca)
 	
-	@ManyToOne //muitos restaurantes possui uma cozinha
+	//@JsonIgnore
+	//@JsonIgnoreProperties("hibernateLazyInitializer")
+	@ManyToOne(fetch = FetchType.LAZY ) //muitos restaurantes possui uma cozinha
 	@JoinColumn (name="cozinha_id",nullable = false)// restrições para não permitir valores nulos nos atributos de restaurante
-	private Cozinha cozinha;
+	private Cozinha cozinha; //restaurante possui uma cozinha
 	
 	@JsonIgnore //Não traz o endereco na requisicao Restaurante
 	@Embedded //é uma parte da classe restaurante
@@ -78,4 +82,7 @@ public class Restaurante {
 	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List <Produto> produtos = new ArrayList<>();	
+	
+	//Associação que Termina com toOne - eager
+	//Associação que Termina com ToMany - Lazy (carrega caso precise)
 }
