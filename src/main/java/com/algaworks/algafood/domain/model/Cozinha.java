@@ -32,10 +32,10 @@ public class Cozinha {
 	private String nome;
 	
 	//1 cozinha tem muitos restaurantes
-	// new ArrayList<>(); - inicializa como uma lista fazia para evitar nullpointer
+	// new ArrayList<>(); - inicializa como uma lista vazia para evitar nullpointer
 	//mappedBy - Em restaurante qual propriedade que mapea x'a cozinha
 	//jsonIgonre - ignora a serialização -loop
 	@JsonIgnore
-	@OneToMany(mappedBy="cozinha")
+	@OneToMany(mappedBy = "cozinha")
 	private List<Restaurante>restaurantes = new ArrayList<>();
 }

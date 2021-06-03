@@ -44,7 +44,7 @@ public class Restaurante {
 	//@JsonIgnoreProperties -> Cozinha$HibernateProxy [\"hibernateLazyInitializer\"])" ignora propriedades dentro da cozinha (classe maluca)
 	//@JsonIgnoreProperties("hibernateLazyInitializer")
 	
-	@JsonIgnore
+	//@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY ) //muitos restaurantes possui uma cozinha
 	@JoinColumn (name="cozinha_id",nullable = false)// restrições para não permitir valores nulos nos atributos de restaurante
 	private Cozinha cozinha; //restaurante possui uma cozinha
@@ -72,7 +72,7 @@ public class Restaurante {
     //inverso - tab forma de Pagamento
 	//JsonIgnore --gera as representações s forma de pagamento
 	
-	//@JsonIgnore
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),

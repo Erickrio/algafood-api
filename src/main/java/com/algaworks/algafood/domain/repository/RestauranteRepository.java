@@ -19,6 +19,9 @@ RestauranteRepositoryQueries,JpaSpecificationExecutor<Restaurante>{
 	
 	//busca um restaurante fazendo um Join com Cozinha
 	//se um restaurante n tiver nenhuma forma de pagamento associada a ele,esse restaurante n sera retornado - use left join fetch 
+	//@Query("from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
+	
+	//@Query("from Restaurante r join fetch r.cozinha")
 	@Query("from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
 	List<Restaurante> findAll();
 
