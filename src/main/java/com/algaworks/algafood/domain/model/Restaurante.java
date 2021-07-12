@@ -45,7 +45,7 @@ public class Restaurante {
 	//@JsonIgnoreProperties("hibernateLazyInitializer")
 	
 	//@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY ) //muitos restaurantes possui uma cozinha
+	@ManyToOne//(fetch = FetchType.LAZY ) //muitos restaurantes possui uma cozinha
 	@JoinColumn (name="cozinha_id",nullable = false)// restrições para não permitir valores nulos nos atributos de restaurante
 	private Cozinha cozinha; //restaurante possui uma cozinha
 	
