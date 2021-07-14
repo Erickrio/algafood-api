@@ -62,18 +62,24 @@ public class RestauranteController {
 	}
 	
 	
-	//@ResponseStatus(HttpStatus.CREATED)
-	//coringa ? -pode ser qualquer coisa(restaurante) = getMessage
+//	//@ResponseStatus(HttpStatus.CREATED)
+//	//coringa ? -pode ser qualquer coisa(restaurante) = getMessage
+//	@PostMapping
+//	public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante){
+//		try {
+//			restaurante = cadastroRestaurante.salvar(restaurante);
+//			return ResponseEntity.status(HttpStatus.CREATED)
+//					.body(restaurante);
+//		} catch(EntidadeNaoEncontradaException e) {
+//			return ResponseEntity.badRequest().body(e.getMessage());
+//		}
+//		
+//	}
+	
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante){
-		try {
-			restaurante = cadastroRestaurante.salvar(restaurante);
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(restaurante);
-		} catch(EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-		
+	@ResponseStatus(HttpStatus.CREATED)
+	public Restaurante adicionar(@RequestBody Restaurante restaurante) {
+		return cadastroRestaurante.salvar(restaurante);
 	}
 	
 	/*
@@ -82,38 +88,50 @@ public class RestauranteController {
 	 * @RequestBody  obtem valores do body da requisição.
 	 * @PutMapping mapear nosso endpoint para esse verbo, com esse path
 	 */
+//	@PutMapping("/{restauranteId}")
+//	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
+//			@RequestBody Restaurante restaurante) {
+//		try {
+//			Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
+//			//cópia das propriedades do objeto Restaurante
+//			if (restauranteAtual != null) {
+//			// add propriedade para ser ignorada
+//				BeanUtils.copyProperties(restaurante, restauranteAtual, "id","formasPagamento",
+//						"endereco","dataCadastro","produtos");
+//				
+//				restauranteAtual = cadastroRestaurante.salvar(restauranteAtual);
+//				return ResponseEntity.ok(restauranteAtual);
+//			}
+//			
+//			return ResponseEntity.notFound().build();
+//		
+//		} catch (EntidadeNaoEncontradaException e) {
+//			return ResponseEntity.badRequest()
+//					.body(e.getMessage());
+//		}
+//	}
+	
 	@PutMapping("/{restauranteId}")
-	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
+	public Restaurante atualizar(@PathVariable Long restauranteId,
 			@RequestBody Restaurante restaurante) {
-		try {
-			Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
-			//cópia das propriedades do objeto Restaurante
-			if (restauranteAtual != null) {
-			// add propriedade para ser ignorada
-				BeanUtils.copyProperties(restaurante, restauranteAtual, "id","formasPagamento",
-						"endereco","dataCadastro","produto");
-				
-				restauranteAtual = cadastroRestaurante.salvar(restauranteAtual);
-				return ResponseEntity.ok(restauranteAtual);
-			}
-			
-			return ResponseEntity.notFound().build();
 		
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest()
-					.body(e.getMessage());
-		}
+		 Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
+		 
+		 BeanUtils.copyProperties(restaurante, restauranteAtual, "id","formasPagamento",
+					"endereco","dataCadastro","produtos");
+	
+		 return cadastroRestaurante.salvar(restauranteAtual);
+		
 	}
 	
 	@PatchMapping("/{restauranteId}")//atualiza apenas 1 atributo 
-	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId,
+	public Restaurante atualizarParcial(@PathVariable Long restauranteId,
 			@RequestBody Map<String, Object> campos) {
 		//busca no restaurante
-		Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
-		//se restaurante atual for nula
-		if (restauranteAtual == null) {
-			return ResponseEntity.notFound().build();
-		}
+//		Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
+		
+		Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
+
 		//Função do merge mesclar os valores que está no campo (campos) - dentro do restauranteAtual
 		merge(campos, restauranteAtual);
 		//chama o metodo atualizar passando o restauranteId e o restaurante atual para salvar

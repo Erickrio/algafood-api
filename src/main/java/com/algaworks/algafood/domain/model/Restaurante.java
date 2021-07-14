@@ -59,12 +59,12 @@ public class Restaurante {
 	//@CreationTimestamp - dt atual
 	@JsonIgnore
 	@CreationTimestamp
-	@Column(nullable=false)
+	@Column(nullable=false, columnDefinition = "datetime")
 	private LocalDateTime dataCadastro;
 	
 	@JsonIgnore
 	@UpdateTimestamp
-	@Column(nullable=false)
+	@Column(nullable=false, columnDefinition = "datetime")
 	private LocalDateTime dataAtualizacao;
 	
 	//muitos restaurantes possui muitas formas de pagamento

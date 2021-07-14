@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonRootName("cozinha")
+//@JsonRootName("cozinha")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -35,6 +35,7 @@ public class Cozinha {
 	// new ArrayList<>(); - inicializa como uma lista vazia para evitar nullpointer
 	//mappedBy - Em restaurante qual propriedade que mapea x'a cozinha
 	//jsonIgonre - ignora a serialização -loop
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "cozinha")
 	private List<Restaurante>restaurantes = new ArrayList<>();
