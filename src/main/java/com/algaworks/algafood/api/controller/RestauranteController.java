@@ -125,8 +125,8 @@ public class RestauranteController {
 
 			Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
-			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro",
-					"produtos");
+			BeanUtils.copyProperties(restaurante, restauranteAtual, 
+					"id", "formasPagamento", "endereco", "dataCadastro","produtos");
 			return cadastroRestaurante.salvar(restauranteAtual);
 		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());

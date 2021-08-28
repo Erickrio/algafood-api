@@ -43,23 +43,22 @@ public class CadastroCidadeService {
 		return cidadeRepository.save(cidade);
 	}
     
-    public void excluir(Long cidadeId) {
-        try {
-            cidadeRepository.deleteById(cidadeId);
-            
-        } catch (EmptyResultDataAccessException e) {
-            throw new CidadeNaoEncontradaException(
-                String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId));
-        
-        } catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(
-                String.format(MSG_CIDADE_EM_USO, cidadeId));
-        }
-    }
+	public void excluir(Long cidadeId) {
+	    try {
+	        cidadeRepository.deleteById(cidadeId);
+	        
+	    } catch (EmptyResultDataAccessException e) {
+	        throw new CidadeNaoEncontradaException(cidadeId);
+	    
+	    } catch (DataIntegrityViolationException e) {
+	        throw new EntidadeEmUsoException(
+	            String.format(MSG_CIDADE_EM_USO, cidadeId));
+	    }
+	}
     
     public Cidade buscarOuFalhar(Long cidadeId) {
-    	return cidadeRepository.findById(cidadeId).orElseThrow(() ->
-    	new CidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId)));
+    	return cidadeRepository.findById(cidadeId)
+    	.orElseThrow(() -> new CidadeNaoEncontradaException(cidadeId));
     }
     
 
