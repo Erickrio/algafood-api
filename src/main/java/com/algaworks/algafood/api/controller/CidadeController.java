@@ -140,34 +140,5 @@ public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade)
 	public void remover(@PathVariable Long cidadeId) {
 		cadastroCidade.excluir(cidadeId);
 	}
-	
-	//metodos do controlador que tratam exceções aqui no controlador
-	//não mostra os objetos e sim ,só a mensagem
-	
-	@ExceptionHandler(EntidadeNaoEncontradaException.class)
-	public ResponseEntity<?> tratarEntidadeNaoEncontradoException(
-			EntidadeNaoEncontradaException e){
 		
-		Problema problema = Problema.builder()
-				.datahora(LocalDateTime.now())
-				.mensagem(e.getMessage()).build();
-				
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(problema);
-		
-	}
-	
-	@ExceptionHandler(NegocioException.class)
-	public ResponseEntity<?> tratarNegocioException(
-			NegocioException e){
-		
-		Problema problema = Problema.builder()
-		.datahora(LocalDateTime.now())
-		.mensagem(e.getMessage()).build();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(problema);
-		
-	}
-	
 	}
